@@ -4,7 +4,7 @@ drop table if exists t_users;
 
 create table t_assets
 (
-   id             int not null,
+   id             int not null AUTO_INCREMENT,
    user_id                   int,
    plat_mobil           varchar(50),
    no_rangka            varchar(120),
@@ -12,20 +12,20 @@ create table t_assets
    owner_name           varchar(100),
    date_oil             timestamp,
    status               int,
-   created_at           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-   updated_at           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   created_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
+   updated_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
    primary key (id)
 );
 
 create table t_users
 (
-   id                   int not null,
+   id                   int not null AUTO_INCREMENT,
    username             varchar(50),
    password             varchar(256),
    email                varchar(50),
    status               int,
-   created_at           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-   updated_at           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   created_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
+   updated_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
    primary key (id)
 );
 
