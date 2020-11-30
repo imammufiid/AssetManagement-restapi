@@ -20,7 +20,7 @@ class Auth extends RestController
   public function index_get()
   {
     // echo "asdfasd";die;
-    successResponse(RestController::HTTP_OK, "asdfasdf123");
+    myResponse(RestController::HTTP_OK, "asdfasdf123");
   }
 
 
@@ -31,16 +31,16 @@ class Auth extends RestController
     $password = trim($this->post('password'));
 
     if ($this->post() == null) {
-      successResponse(HTTP_BAD_REQUEST, "Request null");
+      myResponse(HTTP_BAD_REQUEST, "Request null");
     } else {
       if ($username == null || $password == null) {
-        successResponse(HTTP_BAD_REQUEST, "Username or Password required");
+        myResponse(HTTP_BAD_REQUEST, "Username or Password required");
       } else {
         $get = $this->auth->getByLogin($username, $password);
         if (!empty($get)) {
-          successResponse(HTTP_OK, "Successfully", $get);
+          myResponse(HTTP_OK, "Successfully", $get);
         } else {
-          successResponse(HTTP_BAD_REQUEST, "User not found!");
+          myResponse(HTTP_BAD_REQUEST, "User not found!");
         }
       }
     }
@@ -52,20 +52,20 @@ class Auth extends RestController
     $confirmPassword = trim($this->post('confirm_password'));
 
     if ($this->post() == null) {
-      successResponse(HTTP_BAD_REQUEST, "Request NULL");
+      myResponse(HTTP_BAD_REQUEST, "Request NULL");
     } else {
 
       if ($this->post('username') == null || $this->post('password') == null) {
-        successResponse(HTTP_BAD_REQUEST, "Request Required");
+        myResponse(HTTP_BAD_REQUEST, "Request Required");
       } else {
         if ($password !== $confirmPassword)
-        successResponse(HTTP_BAD_REQUEST, "Password Not Match!");
+        myResponse(HTTP_BAD_REQUEST, "Password Not Match!");
       }
 
       if ($this->auth->registration($this->post())) {
-        successResponse(HTTP_CREATED, "Registration Successfully");
+        myResponse(HTTP_CREATED, "Registration Successfully");
       } else {
-        successResponse(HTTP_BAD_REQUEST, "Registration Failed");
+        myResponse(HTTP_BAD_REQUEST, "Registration Failed");
       }
     }
   }
