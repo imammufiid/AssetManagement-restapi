@@ -3,6 +3,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
+use const chriskacerguis\RestServer\HTTP_BAD_REQUEST;
+use const chriskacerguis\RestServer\HTTP_CREATED;
+use const chriskacerguis\RestServer\HTTP_OK;
+
 class Auth extends RestController
 {
 
@@ -15,10 +19,8 @@ class Auth extends RestController
 
   public function index_get()
   {
-    $this->response([
-      'status' => RestController::HTTP_UNAUTHORIZED,
-      'message' => 'Unauthorized'
-    ], RestController::HTTP_UNAUTHORIZED);
+    // echo "asdfasd";die;
+    successResponse(RestController::HTTP_OK, "asdfasdf123");
   }
 
 
@@ -29,29 +31,16 @@ class Auth extends RestController
     $password = trim($this->post('password'));
 
     if ($this->post() == null) {
-      $this->response([
-        'status' => RestController::HTTP_BAD_REQUEST,
-        'message' => 'Request null'
-      ], RestController::HTTP_BAD_REQUEST);
+      successResponse(HTTP_BAD_REQUEST, "Request null");
     } else {
       if ($username == null || $password == null) {
-        $this->response([
-          'status' => RestController::HTTP_BAD_REQUEST,
-          'message' => 'Username or Password required'
-        ], RestController::HTTP_BAD_REQUEST);
+        successResponse(HTTP_BAD_REQUEST, "Username or Password required");
       } else {
         $get = $this->auth->getByLogin($username, $password);
         if (!empty($get)) {
-          $this->response([
-            'status' => RestController::HTTP_OK,
-            'message' => 'name of request',
-            'data' => $get
-          ], RestController::HTTP_OK);
+          successResponse(HTTP_OK, "Successfully", $get);
         } else {
-          $this->response([
-            'status' => RestController::HTTP_BAD_REQUEST,
-            'message' => 'User not found'
-          ], RestController::HTTP_BAD_REQUEST);
+          successResponse(HTTP_BAD_REQUEST, "User not found!");
         }
       }
     }
@@ -62,43 +51,27 @@ class Auth extends RestController
     $password = trim($this->post('password'));
     $confirmPassword = trim($this->post('confirm_password'));
 
-
     if ($this->post() == null) {
-      $this->response([
-        'status' => RestController::HTTP_BAD_REQUEST,
-        'message' => 'Request null'
-      ], RestController::HTTP_BAD_REQUEST);
+      successResponse(HTTP_BAD_REQUEST, "Request NULL");
     } else {
 
       if ($this->post('username') == null || $this->post('password') == null) {
-        $this->response([
-          'status' => RestController::HTTP_BAD_REQUEST,
-          'message' => 'Request required'
-        ], RestController::HTTP_BAD_REQUEST);
+        successResponse(HTTP_BAD_REQUEST, "Request Required");
       } else {
         if ($password !== $confirmPassword)
-          $this->response([
-            'status' => RestController::HTTP_BAD_REQUEST,
-            'message' => 'Password not match'
-          ], RestController::HTTP_BAD_REQUEST);
+        successResponse(HTTP_BAD_REQUEST, "Password Not Match!");
       }
 
-      if($this->auth->registration($this->post())) {
-        $this->response([
-          'status' => RestController::HTTP_OK,
-          'message' => 'Registration Succesfully',
-        ], RestController::HTTP_OK);
+      if ($this->auth->registration($this->post())) {
+        successResponse(HTTP_CREATED, "Registration Successfully");
       } else {
-        $this->response([
-          'status' => RestController::HTTP_BAD_REQUEST,
-          'message' => 'Registration Failed',
-        ], RestController::HTTP_BAD_REQUEST);
+        successResponse(HTTP_BAD_REQUEST, "Registration Failed");
       }
-      
     }
   }
 
   public function logout_post()
   {
   }
+
 }
