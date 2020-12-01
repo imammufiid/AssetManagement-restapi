@@ -298,7 +298,7 @@ $config['rest_database_group'] = 'default';
 | The table name in your database that stores API keys
 |
 */
-$config['rest_keys_table'] = 'keys';
+$config['rest_keys_table'] = 't_keys';
 
 /*
 |--------------------------------------------------------------------------
@@ -310,7 +310,7 @@ $config['rest_keys_table'] = 'keys';
 | column name see 'rest_key_column'
 |
 | Default table schema:
-|   CREATE TABLE `keys` (
+|   CREATE TABLE `t_keys` (
 |       `id` INT(11) NOT NULL AUTO_INCREMENT,
 |       `user_id` INT(11) NOT NULL,
 |       `key` VARCHAR(40) NOT NULL,
@@ -376,7 +376,7 @@ $config['rest_key_length'] = 40;
 | 2012/06/12. See RFC 6648 specification for more details
 |
 */
-$config['rest_key_name'] = 'X-API-KEY';
+$config['rest_key_name'] = 'API-KEY-TOKEN';
 
 /*
 |--------------------------------------------------------------------------
@@ -425,7 +425,7 @@ $config['rest_logs_table'] = 'logs';
 | to use this
 |
 | Default table schema:
-|   CREATE TABLE `access` (
+|   CREATE TABLE `t_access` (
 |       `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
 |       `key` VARCHAR(40) NOT NULL DEFAULT '',
 |       `all_access` TINYINT(1) NOT NULL DEFAULT '0',
@@ -447,7 +447,7 @@ $config['rest_enable_access'] = false;
 | table name to match e.g. my_access
 |
 */
-$config['rest_access_table'] = 'access';
+$config['rest_access_table'] = 't_access';
 
 /*
 |--------------------------------------------------------------------------
