@@ -38,16 +38,31 @@ class MAssets extends CI_Model
 	 */
 	public function action($id = null, $action = null, $data = null)
 	{
+		$date = date("Y-m-d H:i:s");
+
+		if ($data != null) {
+			if($data['date_oil'] != null) {
+				$date = $data['date_oil'];
+			}
+			$time = strtotime($date);
+			$dateExpired = date("Y-m-d H:i:s", strtotime("+4 month", $time));
+		}
+
+		$newData = array_merge($data, [
+			'date_oil' => $date,
+			'date_expired_oil' => $dateExpired
+		]);
+		
 		if ($id != null) {
 			switch ($action) {
-				case 2:
+				case GETBYID:
 					$this->get($id);
 					break;
-				case 4:
-					$this->db->update('t_assets', $data, ['id' => $id]);
+				case UPDATE:
+					$this->db->update('t_assets', $newData, ['id' => $id]);
 					return $this->db->affected_rows();
 					break;
-				case 5:
+				case DELETE:
 					$this->db->delete('t_assets', ['id' => $id]);
 					return $this->db->affected_rows();
 					break;
@@ -57,8 +72,8 @@ class MAssets extends CI_Model
 			}
 		} else {
 			switch ($action) {
-				case 3:
-					$this->db->insert('t_assets', $data);
+				case INSERT:
+					$this->db->insert('t_assets', $newData);
 					return $this->db->affected_rows();
 					break;
 
@@ -80,7 +95,7 @@ class MAssets extends CI_Model
 	 */
 	public function getWithPaging($id = null, $limit = 10, $offset = 0)
 	{
-		if($id === null) {
+		if ($id === null) {
 			return $this->db->get('t_assets', $limit, $offset)->result();
 		} else {
 			$this->get($id);
