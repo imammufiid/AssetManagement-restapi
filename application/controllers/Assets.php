@@ -71,12 +71,12 @@ class Assets extends RestController
    public function index_post()
    {
       $data = [
-         'user_id' => $this->post('user_id', true),
-         'plat_mobil' => $this->post('plat_mobil', true),
-         'no_rangka' => $this->post('no_rangka', true),
-         'no_mesin' => $this->post('no_mesin', true),
-         'owner_name' => $this->post('owner_name', true),
-         'date_oil' => $this->post('date_oil', true)
+         'user_id' => trim($this->post('user_id', true)),
+         'plat_mobil' => trim($this->post('plat_mobil', true)),
+         'no_rangka' => trim($this->post('no_rangka', true)),
+         'no_mesin' => trim($this->post('no_mesin', true)),
+         'owner_name' => trim($this->post('owner_name', true)),
+         'date_oil' => trim($this->post('date_oil', true))
       ];
 
       if ($this->asset->action(null, INSERT, $data) == 1) {
@@ -95,12 +95,12 @@ class Assets extends RestController
    {
       $id = $this->put('id', true);
       $data = [
-         'user_id' => $this->put('user_id', true),
-         'plat_mobil' => $this->put('plat_mobil', true),
-         'no_rangka' => $this->put('no_rangka', true),
-         'no_mesin' => $this->put('no_mesin', true),
-         'owner_name' => $this->put('owner_name', true),
-         'date_oil' => $this->put('date_oil', true)
+         'user_id' => trim($this->put('user_id', true)),
+         'plat_mobil' => trim($this->put('plat_mobil', true)),
+         'no_rangka' => trim($this->put('no_rangka', true)),
+         'no_mesin' => trim($this->put('no_mesin', true)),
+         'owner_name' => trim($this->put('owner_name', true)),
+         'date_oil' => trim($this->put('date_oil', true))
       ];
 
       if ($this->asset->action($id, UPDATE, $data) == 1) {
