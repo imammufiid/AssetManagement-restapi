@@ -1,34 +1,51 @@
-drop table if exists t_assets;
+DROP TABLE IF EXISTS t_assets;
 
-drop table if exists t_users;
+DROP TABLE IF EXISTS t_users;
 
-create table t_assets
-(
-   id             int not null AUTO_INCREMENT,
-   user_id                   int,
-   plat_mobil           varchar(50),
-   no_rangka            varchar(120),
-   no_mesin             varchar(120),
-   owner_name           varchar(100),
-   date_oil             timestamp,
-   status               int,
-   created_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
-   updated_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
-   primary key (id)
+DROP TABLE IF EXISTS t_keys;
+
+CREATE TABLE t_assets (
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT,
+	plat_mobil VARCHAR ( 50 ),
+	no_rangka VARCHAR ( 120 ),
+	no_mesin VARCHAR ( 120 ),
+	owner_name VARCHAR ( 100 ),
+	date_oil TIMESTAMP NULL DEFAULT NULL,
+	date_expired_oil TIMESTAMP NULL DEFAULT NULL,
+	status TINYINT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY ( id ) 
 );
 
-create table t_users
+CREATE TABLE t_users
 (
-   id                   int not null AUTO_INCREMENT,
-   username             varchar(50),
-   password             varchar(256),
-   email                varchar(50),
-   status               int,
-   created_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
-   updated_at           timestamp DEFAULT NOW() ON UPDATE NOW(),
-   primary key (id)
+   id                   INT NOT NULL AUTO_INCREMENT,
+   username             VARCHAR(50),
+   password             VARCHAR(256),
+   email                VARCHAR(50),
+   status               INT,
+   created_at           TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
+   updated_at           TIMESTAMP DEFAULT NOW() ON UPDATE NOW(),
+   PRIMARY KEY (id)
 );
 
-alter table t_assets add constraint FK_RELATIONSHIP_1 foreign key (user_id)
-      references t_users (id) on delete restrict on update restrict;
+CREATE TABLE `t_keys` (
+	`id` INT ( 11 ) NOT NULL AUTO_INCREMENT,
+	`user_id` INT ( 11 ) NOT NULL,
+	`key` VARCHAR ( 40 ) NOT NULL,
+	`level` INT ( 2 ) NOT NULL,
+	`ignore_limits` TINYINT ( 1 ) NOT NULL DEFAULT '0',
+	`is_private_key` TINYINT ( 1 ) NOT NULL DEFAULT '0',
+	`ip_addresses` TEXT NULL DEFAULT NULL,
+	`date_created` VARCHAR ( 11 ) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY ( `id` ) 
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
 
+
+ALTER TABLE t_assets ADD CONSTRAINT FK_RELATIONSHIP_1 FOREIGN KEY ( user_id ) 
+	REFERENCES t_users ( id ) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE t_keys add CONSTRAINT FK_RELATIONSHIP_2 FOREIGN KEY (user_id)
+    REFERENCES t_users (id) ON DELETE restrict ON UPDATE restrict;
