@@ -48,6 +48,11 @@ class Auth extends RestController
     }
   }
 
+  /**
+   * Registration
+   *
+   * @return void
+   */
   public function register_post()
   {
     $postData = $this->security->xss_clean($this->post());
