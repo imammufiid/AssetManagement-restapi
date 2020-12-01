@@ -82,7 +82,7 @@ class Assets extends RestController
       if ($this->asset->action(null, INSERT, $data) == 1) {
          myResponse(HTTP_CREATED, "Success add data");
       } else {
-         myResponse(HTTP_CREATED, "Failed add data");
+         myResponse(HTTP_BAD_REQUEST, "Failed add data");
       }
    }
 
