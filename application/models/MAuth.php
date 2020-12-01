@@ -62,7 +62,7 @@ class MAuth extends CI_Model
          'key' => password_hash($newData['email'], PASSWORD_BCRYPT),
          'level' => 1,
          'ignore_limits' => 1,
-         'date_created' => strtotime("now")
+         'date_created' => date('Y-m-d H:i:s')
       ];
 
       if ($this->db->insert('t_keys', $dataGenerate)) {
