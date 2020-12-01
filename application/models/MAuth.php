@@ -26,6 +26,7 @@ class MAuth extends CI_Model
 
          if (!empty($query)) {
             if (password_verify($password, $query->password)) {
+               unset($query->password);
                return [
                   'status' => true,
                   'data' => $query
