@@ -27,8 +27,8 @@ class Auth extends RestController
   public function index_post()
   {
     $postData = $this->security->xss_clean($this->post());
-    $username = trim($postData('username'));
-    $password = trim($postData('password'));
+    $username = trim($postData['username']);
+    $password = trim($postData['password']);
 
 
     if ($postData == null) {
@@ -38,10 +38,11 @@ class Auth extends RestController
         myResponse(HTTP_BAD_REQUEST, "Username or Password required");
       } else {
         $get = $this->auth->getByLogin($username, $password);
-        if (!empty($get)) {
+        
+        if ($get['status']) {
           myResponse(HTTP_OK, "Successfully", $get);
         } else {
-          myResponse(HTTP_BAD_REQUEST, "User not found!");
+          myResponse(HTTP_BAD_REQUEST, $get['message']);
         }
       }
     }

@@ -14,12 +14,15 @@ class MAuth extends CI_Model
    public function getByLogin($username = null, $password = null)
    {
       if ($username == null || $password == null) {
-         return 0;
+         return ['status' => false,  'message' => 'Request Null'];
       } else {
          $query = $this->db
-            ->get_where('t_users', ['username' => $username])
+            ->select('u.id, u.username, u.email, u.status, u.password, k.key')
+            ->from('t_users u')
+            ->from('t_keys k', 'k.user_id = u.id')
+            ->where('username', $username)
+            ->get()
             ->row();
-
 
          if (!empty($query)) {
             if (password_verify($password, $query->password)) {
@@ -28,8 +31,10 @@ class MAuth extends CI_Model
                   'data' => $query
                ];
             } else {
-               return ['status' => false];
+               return ['status' => false, 'message' => 'Password Wrong!'];
             }
+         } else {
+            return ['status' => false, 'message' => 'User Not Found!'];
          }
       }
    }
@@ -51,8 +56,8 @@ class MAuth extends CI_Model
       ];
 
       // create users
-      
-      if(!$this->db->insert('t_users', $newData)) {
+
+      if (!$this->db->insert('t_users', $newData)) {
          return false;
       }
 
