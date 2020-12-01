@@ -21,7 +21,7 @@ class Migrasi extends CI_Controller
 			// If it has a semicolon at the end, it's the end of the query
 			if (substr(trim($line), -1, 1) == ';') {
 				// Perform the query
-				$this->db->query($templine) or print('Error performing query \'<strong>' . $templine . '\': <br /><br />');
+				$this->db->query($templine) or print('Error performing query \'<strong>' . $templine . '\':'. $this->db->error() .' <br /><br />');
 				// Reset temp variable to empty
 				$templine = '';
 			}
