@@ -19,7 +19,6 @@ class Auth extends RestController
 
   public function index_get()
   {
-    // echo "asdfasd";die;
     myResponse(RestController::HTTP_OK, "asdfasdf123");
   }
 
@@ -27,10 +26,12 @@ class Auth extends RestController
   /** Login */
   public function index_post()
   {
-    $username = trim($this->post('username'));
-    $password = trim($this->post('password'));
+    $postData = $this->security->xss_clean($this->post());
+    $username = trim($postData('username'));
+    $password = trim($postData('password'));
 
-    if ($this->post() == null) {
+
+    if ($postData == null) {
       myResponse(HTTP_BAD_REQUEST, "Request null");
     } else {
       if ($username == null || $password == null) {
@@ -48,21 +49,47 @@ class Auth extends RestController
 
   public function register_post()
   {
-    $password = trim($this->post('password'));
-    $confirmPassword = trim($this->post('confirm_password'));
+    $postData = $this->security->xss_clean($this->post());
 
-    if ($this->post() == null) {
-      myResponse(HTTP_BAD_REQUEST, "Request NULL");
+    $this->form_validation->set_rules(
+      'username',
+      'Username',
+      'trim|required|is_unique[t_users.username]',
+      [
+        'required' => 'Username harus diisi',
+        'is_unique' => 'Username sudah digunakan'
+      ]
+    );
+    $this->form_validation->set_rules(
+      'email',
+      'Email',
+      'trim|required|is_unique[t_users.email]',
+      [
+        'required'      => 'Email harus diisi',
+        'is_unique'     => 'Email sudah digunakan'
+      ]
+    );
+    $this->form_validation->set_rules(
+      'password',
+      'Password',
+      'trim|required',
+      ['required' => 'Password harus diisi']
+    );
+    $this->form_validation->set_rules(
+      'confirm_password',
+      'Password Confirmation',
+      'trim|required|matches[password]',
+      [
+        'required'      => 'Password Konfirmasi harus diisi',
+        'matches'     => 'Password anda tidak sama'
+      ]
+    );
+
+    if ($this->form_validation->run() == FALSE) {
+      $error = $this->form_validation->error_array();
+      myResponse(HTTP_BAD_REQUEST, "Request Validation Error", $error);
     } else {
-
-      if ($this->post('username') == null || $this->post('password') == null) {
-        myResponse(HTTP_BAD_REQUEST, "Request Required");
-      } else {
-        if ($password !== $confirmPassword)
-        myResponse(HTTP_BAD_REQUEST, "Password Not Match!");
-      }
-
-      if ($this->auth->registration($this->post())) {
+      if ($this->auth->registration($postData)) {
         myResponse(HTTP_CREATED, "Registration Successfully");
       } else {
         myResponse(HTTP_BAD_REQUEST, "Registration Failed");
@@ -73,5 +100,4 @@ class Auth extends RestController
   public function logout_post()
   {
   }
-
 }

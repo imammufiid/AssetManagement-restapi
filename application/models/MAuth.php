@@ -50,7 +50,22 @@ class MAuth extends CI_Model
          'password' => password_hash($password, PASSWORD_DEFAULT),
       ];
 
-      if ($this->db->insert('t_users', $newData)) {
+      // create users
+      
+      if(!$this->db->insert('t_users', $newData)) {
+         return false;
+      }
+
+      // generate key
+      $dataGenerate = [
+         'user_id' => $this->db->insert_id(),
+         'key' => password_hash($newData['email'], PASSWORD_BCRYPT),
+         'level' => 1,
+         'ignore_limits' => 1,
+         'date_created' => strtotime("now")
+      ];
+
+      if ($this->db->insert('t_keys', $dataGenerate)) {
          return true;
       } else {
          return false;
