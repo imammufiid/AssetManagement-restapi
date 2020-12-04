@@ -200,7 +200,7 @@ $config['auth_library_function'] = '';
 */
 
 // ---Uncomment list line for the wildard unit test
-// $config['auth_override_class_method_http']['wildcard_test_cases']['*']['options'] = 'basic';
+// $config['auth_override_class_method_http']['Auth']['register']['post'] = 'none';
 
 /*
 |--------------------------------------------------------------------------
