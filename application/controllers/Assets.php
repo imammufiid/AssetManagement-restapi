@@ -4,7 +4,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use chriskacerguis\RestServer\RestController;
 use const chriskacerguis\RestServer\HTTP_BAD_REQUEST;
 use const chriskacerguis\RestServer\HTTP_CREATED;
+use const chriskacerguis\RestServer\HTTP_INTERNAL_ERROR;
 use const chriskacerguis\RestServer\HTTP_OK;
+use const chriskacerguis\RestServer\HTTP_UNAUTHORIZED;
 
 const PERPAGE = 2;
 class Assets extends RestController
@@ -24,12 +26,26 @@ class Assets extends RestController
    public function index_get()
    {
       $id = $this->get('id', true);
-      if ($id == null) {
-         $getData = $this->asset->get();
-         myResponse(HTTP_OK, "This data", $getData);
-      } else {
-         $getData = $this->asset->get($id);
-         myResponse(HTTP_OK, "This data", $getData);
+      $userId = $this->get('user_id', true);
+      
+      try {
+         if ($userId == null) {
+            myResponse(HTTP_UNAUTHORIZED, "Unauthorized");
+         } else {
+            if ($id == null) {
+               $getData = $this->asset->get($userId);
+               myResponse(HTTP_OK, "This data", $getData);
+            } else {
+               $getData = $this->asset->get($userId, $id);
+               if ($getData == null) {
+                  myResponse(HTTP_OK, "Data not found");
+               } else {
+                  myResponse(HTTP_OK, "This data", $getData);
+               }
+            }
+         }
+      } catch (\Throwable $e) {
+         myResponse(HTTP_INTERNAL_ERROR, "Internal Server Error");
       }
    }
 
