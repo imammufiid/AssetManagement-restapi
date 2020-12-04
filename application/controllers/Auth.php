@@ -38,9 +38,8 @@ class Auth extends RestController
         myResponse(HTTP_BAD_REQUEST, "Username or Password required");
       } else {
         $get = $this->auth->getByLogin($username, $password);
-        
         if ($get['status']) {
-          myResponse(HTTP_OK, "Successfully", $get);
+          myResponse(HTTP_OK, "Successfully", $get['data']);
         } else {
           myResponse(HTTP_BAD_REQUEST, $get['message']);
         }
