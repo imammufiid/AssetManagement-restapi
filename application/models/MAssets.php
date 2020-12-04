@@ -19,10 +19,12 @@ class MAssets extends CI_Model
 	 * @param integer $id assets
 	 * @return array of data
 	 */
-	public function get($id = null)
+	public function get($userId = null, $id = null)
 	{
 		if ($id == null) {
-			return $this->db->get('t_assets')->result();
+			return $this->db
+				->order_by('created_at', 'DESC')
+				->get_where('t_assets', ['user_id' => $userId], 100, 0)->result();
 		} else {
 			return $this->db->get_where('t_assets', ['id' => $id])->row();
 		}
@@ -41,7 +43,7 @@ class MAssets extends CI_Model
 		$date = date("Y-m-d H:i:s");
 
 		if ($data != null) {
-			if($data['date_oil'] != null) {
+			if ($data['date_oil'] != null) {
 				$date = $data['date_oil'];
 			}
 			$time = strtotime($date);
@@ -52,7 +54,7 @@ class MAssets extends CI_Model
 			'date_oil' => $date,
 			'date_expired_oil' => $dateExpired
 		]);
-		
+
 		if ($id != null) {
 			switch ($action) {
 				case GETBYID:
