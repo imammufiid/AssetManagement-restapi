@@ -5,6 +5,7 @@ use chriskacerguis\RestServer\RestController;
 use const chriskacerguis\RestServer\HTTP_BAD_REQUEST;
 use const chriskacerguis\RestServer\HTTP_CREATED;
 use const chriskacerguis\RestServer\HTTP_INTERNAL_ERROR;
+use const chriskacerguis\RestServer\HTTP_NOT_FOUND;
 use const chriskacerguis\RestServer\HTTP_OK;
 use const chriskacerguis\RestServer\HTTP_UNAUTHORIZED;
 
@@ -88,6 +89,7 @@ class Assets extends RestController
    {
       $data = [
          'user_id' => trim($this->post('user_id', true)),
+         'merk_mobil' => trim($this->post('merk_mobil', true)),
          'plat_mobil' => trim($this->post('plat_mobil', true)),
          'no_rangka' => trim($this->post('no_rangka', true)),
          'no_mesin' => trim($this->post('no_mesin', true)),
@@ -112,6 +114,7 @@ class Assets extends RestController
       $id = $this->put('id', true);
       $data = [
          'user_id' => trim($this->put('user_id', true)),
+         'merk_mobil' => trim($this->put('merk_mobil', true)),
          'plat_mobil' => trim($this->put('plat_mobil', true)),
          'no_rangka' => trim($this->put('no_rangka', true)),
          'no_mesin' => trim($this->put('no_mesin', true)),
@@ -139,5 +142,22 @@ class Assets extends RestController
       } else {
          myResponse(HTTP_CREATED, "Failed delete data");
       }
+   }
+
+   public function search_get()
+   {
+      $query = trim($this->get('query', true));
+
+      if(!empty($query)) {
+         $result = $this->asset->search($query);
+         if($result == null) {
+            myResponse(HTTP_OK, "Data not Available", $result);
+         } else {
+            myResponse(HTTP_OK, "This data", $result);
+         }
+      } else {
+         myResponse(HTTP_NOT_FOUND, "Data Not Found!");
+      }
+
    }
 }

@@ -40,16 +40,17 @@ class MAssets extends CI_Model
 	 */
 	public function action($id = null, $action = null, $data = null)
 	{
-		$date = date("Y-m-d H:i:s");
+		$date = date("d-m-Y");
 
 		if ($data != null) {
 			if ($data['date_oil'] != null) {
 				$date = $data['date_oil'];
 			}
 			$time = strtotime($date);
-			$dateExpired = date("Y-m-d H:i:s", strtotime("+4 month", $time));
+			$dateExpired = date("d-m-Y", strtotime("+4 month", $time));
 		}
 
+		// var_dump($date);die;
 		$newData = array_merge($data, [
 			'date_oil' => $date,
 			'date_expired_oil' => $dateExpired
@@ -112,5 +113,14 @@ class MAssets extends CI_Model
 	public function count()
 	{
 		return $this->db->get('t_assets')->num_rows();
+	}
+
+	public function search($query = "")
+	{
+		return $this->db
+				->order_by('created_at', 'DESC')
+				->like('plat_mobil', $query)
+				->or_like('merk_mobil', $query)
+				->get('t_assets')->result();
 	}
 }
